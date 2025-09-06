@@ -1,0 +1,94 @@
+[gd_scene load_steps=6 format=3 uid="uid://352qgue0vvcc"]
+
+[ext_resource type="Script" uid="uid://dud01a3c1jood" path="res://game_manager.gd" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://2i7qlw045elv" path="res://scenes/room.tscn" id="1_o5qli"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgp6g"]
+bg_color = Color(0.0687983, 0.0687983, 0.0687982, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o5qli"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="GDScript" id="GDScript_0wfyh"]
+script/source = "extends Node
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("1_0wfyh")
+
+[node name="UI" type="PanelContainer" parent="GameManager"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_sgp6g")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameManager/UI"]
+layout_mode = 2
+
+[node name="DescriptionContainer" type="MarginContainer" parent="GameManager/UI/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="GameDescription" type="RichTextLabel" parent="GameManager/UI/VBoxContainer/DescriptionContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 400)
+layout_mode = 2
+text = "Podemos já vislumbrar o modo pelo qual o aumento do diálogo entre os diferentes setores produtivos representa uma abertura para a melhoria das diversas correntes de pensamento."
+
+[node name="InputContainer" type="MarginContainer" parent="GameManager/UI/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/margin_bottom = 40
+
+[node name="UserInput" type="LineEdit" parent="GameManager/UI/VBoxContainer/InputContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_o5qli")
+placeholder_text = "O que você fará?"
+max_length = 30
+
+[node name="Rooms" type="Node" parent="."]
+script = SubResource("GDScript_0wfyh")
+
+[node name="Prison1" parent="Rooms" node_paths=PackedStringArray("south_room") instance=ExtResource("1_o5qli")]
+unique_name_in_owner = true
+description = "Você desperta atordoado, sem memória. À sua frente, três esqueletos: dois com os braços estendidos e presos por correntes, e um com a corrente arrebentada, braço caído.O chão está coberto de lodo, e uma goteira constante pinga do teto por um buraco, onde um rato brinca com o que parece ser uma orelha em decomposição.Ao sul, uma grade fecha a saída da cela."
+south_room = NodePath("../Corridor")
+
+[node name="Corridor" parent="Rooms" instance=ExtResource("1_o5qli")]
