@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjbkh8vdvv2mm"]
+
+[ext_resource type="Script" uid="uid://ct271totuh663" path="res://scripts/dynamic_item.gd" id="1_6glvx"]
+
+[node name="DynamicItem" type="Node"]
+script = ExtResource("1_6glvx")

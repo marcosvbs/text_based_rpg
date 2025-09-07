@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://352qgue0vvcc"]
+[gd_scene load_steps=7 format=3 uid="uid://352qgue0vvcc"]
 
 [ext_resource type="Script" uid="uid://dud01a3c1jood" path="res://scripts/game_manager.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://2i7qlw045elv" path="res://scenes/room.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://cr66mijybi3ii" path="res://scenes/static_item.tscn" id="3_sugp2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgp6g"]
 bg_color = Color(0.0687983, 0.0687983, 0.0687982, 1)
@@ -37,9 +38,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("rooms")]
+[node name="GameManager" type="Node" parent="."]
 script = ExtResource("1_0wfyh")
-rooms = [NodePath("../Rooms/NorthCell"), NodePath("../Rooms/Corridor"), NodePath("../Rooms/EastCell"), NodePath("../Rooms/WestCell")]
 
 [node name="UI" type="PanelContainer" parent="GameManager"]
 anchors_preset = 15
@@ -84,19 +84,31 @@ placeholder_text = "O que você faz?"
 max_length = 30
 
 [node name="Rooms" type="Node" parent="."]
-unique_name_in_owner = true
 script = SubResource("GDScript_0wfyh")
 
-[node name="NorthCell" parent="Rooms" node_paths=PackedStringArray("exits") instance=ExtResource("1_o5qli")]
+[node name="NorthCell" parent="Rooms" node_paths=PackedStringArray("exits", "static_items") instance=ExtResource("1_o5qli")]
 unique_name_in_owner = true
 title = "North Cell"
-description = "Você desperta atordoado, sem memória. À sua frente, três esqueletos: dois com os braços estendidos e presos por correntes, e um com a corrente arrebentada, braço caído.O chão está coberto de lodo, e uma goteira constante pinga do teto por um buraco, onde um rato brinca com o que parece ser uma orelha em decomposição.Ao sul, uma grade fecha a saída da cela."
+description = "North cell description"
 exits = [NodePath("../Corridor")]
+static_items = [NodePath("IronGate"), NodePath("LeftSkeleton"), NodePath("MiddleSkeleton"), NodePath("RightSkeleton")]
+
+[node name="IronGate" parent="Rooms/NorthCell" instance=ExtResource("3_sugp2")]
+title = "Iron Gate"
+description = "Iron gate description"
+
+[node name="LeftSkeleton" parent="Rooms/NorthCell" instance=ExtResource("3_sugp2")]
+title = "Left Skeleton"
+description = "Left skeleton description"
+
+[node name="MiddleSkeleton" parent="Rooms/NorthCell" instance=ExtResource("3_sugp2")]
+
+[node name="RightSkeleton" parent="Rooms/NorthCell" instance=ExtResource("3_sugp2")]
 
 [node name="Corridor" parent="Rooms" node_paths=PackedStringArray("exits") instance=ExtResource("1_o5qli")]
 unique_name_in_owner = true
 title = "Corridor"
-description = "Você está no corredor"
+description = "Corridor description"
 exits = [NodePath("../NorthCell"), NodePath("../EastCell"), NodePath("../WestCell")]
 
 [node name="EastCell" parent="Rooms" node_paths=PackedStringArray("exits") instance=ExtResource("1_o5qli")]

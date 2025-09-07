@@ -17,6 +17,8 @@ const INVALID_INPUT_MESSAGE: String = "Nothing happens..."
 var is_game_started: bool = false
 var turns: int = 10
 
+var inventory: Array[DynamicItem]
+
 func reset_user_input() -> void:
 	user_input.clear()
 	user_input.grab_focus()
@@ -42,6 +44,8 @@ func check_user_action(user_input: String) -> void:
 			match input_action:
 				"go":
 					go_action(input_complement)
+				"inspect":
+					inspect_action(input_complement)
 				_:
 					update_narrative(INVALID_INPUT_MESSAGE)
 	else:
@@ -50,7 +54,6 @@ func check_user_action(user_input: String) -> void:
 	
 	reset_user_input()
 	
-
 func go_action(location: String) -> void:
 	
 	for exit in current_room.exits:
@@ -62,7 +65,14 @@ func go_action(location: String) -> void:
 
 	update_narrative("[color=" + orange_color + "]Go[/color] " + location)
 	update_narrative(INVALID_INPUT_MESSAGE)
-	
+
+func inspect_action(target: String) -> void:
+	for item in current_room.static_items:
+		if target.to_lower() == item.title.to_lower():
+			update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
+			update_narrative(item.description)
+			return
+
 func start_action() -> void:
 	is_game_started = true
 	reset_narrative()
