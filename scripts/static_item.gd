@@ -1,6 +1,0 @@
-extends Node
-
-class_name StaticItem
-
-@export var title: String
-@export var description: String

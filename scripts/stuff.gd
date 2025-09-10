@@ -1,6 +1,7 @@
 extends Node
 
-class_name DynamicItem
+class_name Stuff
 
 @export var title: String
 @export var description: String
+@export var items: Array[Item]

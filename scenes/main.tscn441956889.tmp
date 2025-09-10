@@ -88,22 +88,21 @@ max_length = 30
 [node name="Rooms" type="Node" parent="."]
 script = SubResource("GDScript_0wfyh")
 
-[node name="NorthCell" parent="Rooms" node_paths=PackedStringArray("exits", "stuffs") instance=ExtResource("1_o5qli")]
+[node name="NorthCell" parent="Rooms" node_paths=PackedStringArray("exits") instance=ExtResource("1_o5qli")]
 unique_name_in_owner = true
 title = "North Cell"
 description = "North cell description"
-exits = [NodePath("../Corridor")]
-stuffs = [NodePath("Stuffs/IronGate")]
+exits = [null]
 
-[node name="Stuffs" type="Node" parent="Rooms/NorthCell"]
+[node name="StaticItems" type="Node" parent="Rooms/NorthCell"]
 
-[node name="IronGate" parent="Rooms/NorthCell/Stuffs" instance=ExtResource("3_sugp2")]
+[node name="IronGate" parent="Rooms/NorthCell/StaticItems" instance=ExtResource("3_sugp2")]
 title = "Iron Gate"
 description = "Iron gate description"
 
-[node name="Items" type="Node" parent="Rooms/NorthCell"]
+[node name="DynamicItems" type="Node" parent="Rooms/NorthCell"]
 
-[node name="CellKey" parent="Rooms/NorthCell/Items" instance=ExtResource("4_jyhfs")]
+[node name="CellKey" parent="Rooms/NorthCell/DynamicItems" instance=ExtResource("4_jyhfs")]
 title = "Cell Key"
 
 [node name="Corridor" parent="Rooms" node_paths=PackedStringArray("exits") instance=ExtResource("1_o5qli")]
