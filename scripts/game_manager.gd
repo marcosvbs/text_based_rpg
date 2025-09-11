@@ -1,25 +1,22 @@
 extends Node
 
+@export var rooms: Array[Room]
+@onready var narrative = %Narrative
+@onready var user_input = %UserInput
+
 var current_room: Room
 var current_specting_stuff: Stuff
-@export var rooms: Array[Room]
+var is_game_started: bool = false
+var turns: int = 10
+var inventory: Array[Item]
 
 const green_color: String = "#29D640"
 const orange_color: String = "#FBB13C"
 const blue_color: String = "#2892D7"
 const pink_color: String = "#F46197"
-
-const INTRO_MESSAGE: String = "[b][font_size=32]Welcome to Escape in 10 Turns![/font_size][/b]\nThis is a text-based RPG where every choice matters. Your mission is simple: escape the scenario in fewer than 10 turns. Each action you take will cost you 1 turn, so plan carefully.\n\nYou can choose from the following actions: [color=" + orange_color + "]Go[/color], [color=" + blue_color + "]Inspect[/color], and [color=" + pink_color + "]Use[/color].\n\nWhen you’re ready, type [color=" + green_color + "]Start[/color] to begin your adventure."
+const INTRO_MESSAGE: String = "[b][font_size=32]Welcome to Escape in 10 Turns![/font_size][/b]\nThis is a text-based RPG where every choice matters. Your mission is simple: escape the scenario in fewer than 10 turns. Each action you take will cost you 1 turn, so plan carefully.\n\nYou can choose from the following actions: [color=" + orange_color + "]Go[/color], [color=" + blue_color + "]Inspect[/color], [color=" + pink_color + "]Get[/color], Inventory and Use.\n\nWhen you’re ready, type [color=" + green_color + "]Start[/color] to begin your adventure."
 const INVALID_ACTION_MESSAGE: String = "Nothing happens..."
 const INVALID_COMPLEMENT_MESSAGE: String = "For a moment you feel confused... there is no "
-
-@onready var narrative = %Narrative
-@onready var user_input = %UserInput
-
-var is_game_started: bool = false
-var turns: int = 10
-
-var inventory: Array[String] = ["Apple", "Sword"]
 
 func reset_user_input() -> void:
 	user_input.clear()
@@ -48,8 +45,8 @@ func check_user_action(user_input: String) -> void:
 					go_action(input_complement)
 				"inspect":
 					inspect_action(input_complement)
-				"inventory":
-					inventory_action()
+				"get":
+					get_action(input_complement)
 				_:
 					update_narrative(user_input)
 					update_narrative(INVALID_ACTION_MESSAGE)
@@ -58,6 +55,12 @@ func check_user_action(user_input: String) -> void:
 			start_action()
 	
 	reset_user_input()
+	
+func start_action() -> void:
+	is_game_started = true
+	reset_narrative()
+	reset_user_input()
+	show_current_room_description()
 	
 func go_action(location: String) -> void:
 	
@@ -97,20 +100,19 @@ func inspect_action(target: String) -> void:
 	update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
 	update_narrative(INVALID_COMPLEMENT_MESSAGE + target)
 
-func inventory_action() -> void:
-	var inventory_items: String = "You open your inventory and see the following items:\n"
-	
-	for item in inventory:
-		inventory_items += "- " + item + "\n"
-		
-	update_narrative(inventory_items)
+func get_action(target: String) -> void:
+	if current_specting_stuff:
+		for item in current_specting_stuff.items:
+			if target.to_lower() == item.title.to_lower():
+				update_narrative("[color=" + pink_color + "]Get[/color] " + target)
+				update_narrative("You add a " + item.title + " to your inventory.")
+				current_specting_stuff.items.erase(item)
+				inventory.append(item)
+				return
+				
+	update_narrative("[color=" + pink_color + "]Get[/color] " + target)
+	update_narrative(INVALID_COMPLEMENT_MESSAGE + target)
 
-func start_action() -> void:
-	is_game_started = true
-	reset_narrative()
-	reset_user_input()
-	show_current_room_description()
-	
 func _on_user_input_text_submitted(user_input: String):
 	# Check if user input is not empty or just spaces
 	if user_input.strip_edges():

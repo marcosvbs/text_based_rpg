@@ -1,0 +1,116 @@
+[gd_scene load_steps=8 format=3 uid="uid://352qgue0vvcc"]
+
+[ext_resource type="Script" uid="uid://dud01a3c1jood" path="res://scripts/game_manager.gd" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://2i7qlw045elv" path="res://scenes/room.tscn" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://cr66mijybi3ii" path="res://scenes/static_item.tscn" id="3_sugp2"]
+[ext_resource type="PackedScene" uid="uid://bjbkh8vdvv2mm" path="res://scenes/dynamic_item.tscn" id="4_jyhfs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgp6g"]
+bg_color = Color(0.0687983, 0.0687983, 0.0687982, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o5qli"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="GDScript" id="GDScript_0wfyh"]
+script/source = "extends Node
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("rooms")]
+script = ExtResource("1_0wfyh")
+rooms = [NodePath("../Rooms/NorthCell"), NodePath("../Rooms/Corridor")]
+
+[node name="UI" type="PanelContainer" parent="GameManager"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_sgp6g")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameManager/UI"]
+layout_mode = 2
+
+[node name="DescriptionContainer" type="MarginContainer" parent="GameManager/UI/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="Narrative" type="RichTextLabel" parent="GameManager/UI/VBoxContainer/DescriptionContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+bbcode_enabled = true
+scroll_following = true
+vertical_alignment = 2
+text_direction = 1
+
+[node name="InputContainer" type="MarginContainer" parent="GameManager/UI/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/margin_bottom = 40
+
+[node name="UserInput" type="LineEdit" parent="GameManager/UI/VBoxContainer/InputContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_o5qli")
+placeholder_text = "O que você faz?"
+max_length = 30
+
+[node name="Rooms" type="Node" parent="."]
+script = SubResource("GDScript_0wfyh")
+
+[node name="NorthCell" parent="Rooms" node_paths=PackedStringArray("exits", "stuffs") instance=ExtResource("1_o5qli")]
+unique_name_in_owner = true
+title = "North Cell"
+description = "North cell description"
+exits = [NodePath("../Corridor")]
+stuffs = [NodePath("Stuffs/IronGate")]
+
+[node name="Stuffs" type="Node" parent="Rooms/NorthCell"]
+
+[node name="IronGate" parent="Rooms/NorthCell/Stuffs" node_paths=PackedStringArray("items") instance=ExtResource("3_sugp2")]
+title = "Iron Gate"
+description = "Iron gate description"
+items = [NodePath("../../Items/CellKey")]
+
+[node name="Items" type="Node" parent="Rooms/NorthCell"]
+
+[node name="CellKey" parent="Rooms/NorthCell/Items" instance=ExtResource("4_jyhfs")]
+title = "Cell Key"
+description = "You see a cell key!!!"
+
+[node name="Corridor" parent="Rooms" node_paths=PackedStringArray("exits") instance=ExtResource("1_o5qli")]
+title = "Corridor"
+description = "You are in the corridor!"
+exits = [NodePath("../NorthCell")]
+
+[connection signal="text_submitted" from="GameManager/UI/VBoxContainer/InputContainer/UserInput" to="GameManager" method="_on_user_input_text_submitted"]
