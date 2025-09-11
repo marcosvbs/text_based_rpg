@@ -1,6 +1,7 @@
 extends Node
 
 var current_room: Room
+var current_specting_stuff: Stuff
 @export var rooms: Array[Room]
 
 const green_color: String = "#29D640"
@@ -71,11 +72,27 @@ func go_action(location: String) -> void:
 	update_narrative(INVALID_COMPLEMENT_MESSAGE + location)
 
 func inspect_action(target: String) -> void:
-	for stuff in current_room.stuffs:
-		if target.to_lower() == stuff.title.to_lower():
-			update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
-			update_narrative(stuff.description)
-			return
+	# Check current room's title as valid target
+	if target.to_lower() == current_room.title.to_lower():
+		update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
+		update_narrative(current_room.description)
+		return
+	else:
+		# Check among stuff in current room a title as valid target
+		for stuff in current_room.stuffs:
+			if target.to_lower() == stuff.title.to_lower():
+				current_specting_stuff = stuff
+				update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
+				update_narrative(stuff.description)
+				return
+			else: 
+				# Check items in current inspecting stuff a title as valid target
+				if current_specting_stuff:
+					for item in current_specting_stuff.items:
+						if target.to_lower() == item.title.to_lower():
+							update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
+							update_narrative(item.description)
+							return
 			
 	update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
 	update_narrative(INVALID_COMPLEMENT_MESSAGE + target)

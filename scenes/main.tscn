@@ -97,14 +97,16 @@ stuffs = [NodePath("Stuffs/IronGate")]
 
 [node name="Stuffs" type="Node" parent="Rooms/NorthCell"]
 
-[node name="IronGate" parent="Rooms/NorthCell/Stuffs" instance=ExtResource("3_sugp2")]
+[node name="IronGate" parent="Rooms/NorthCell/Stuffs" node_paths=PackedStringArray("items") instance=ExtResource("3_sugp2")]
 title = "Iron Gate"
 description = "Iron gate description"
+items = [NodePath("../../Items/CellKey")]
 
 [node name="Items" type="Node" parent="Rooms/NorthCell"]
 
 [node name="CellKey" parent="Rooms/NorthCell/Items" instance=ExtResource("4_jyhfs")]
 title = "Cell Key"
+description = "You see a cell key!!!"
 
 [node name="Corridor" parent="Rooms" node_paths=PackedStringArray("exits") instance=ExtResource("1_o5qli")]
 title = "Corridor"
