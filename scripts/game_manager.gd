@@ -14,6 +14,7 @@ const green_color: String = "#29D640"
 const orange_color: String = "#FBB13C"
 const blue_color: String = "#2892D7"
 const pink_color: String = "#F46197"
+const yellow_color: String = "#FAE43C"
 const INTRO_MESSAGE: String = "[b][font_size=32]Welcome to Escape in 10 Turns![/font_size][/b]\nThis is a text-based RPG where every choice matters. Your mission is simple: escape the scenario in fewer than 10 turns. Each action you take will cost you 1 turn, so plan carefully.\n\nYou can choose from the following actions: [color=" + orange_color + "]Go[/color], [color=" + blue_color + "]Inspect[/color], [color=" + pink_color + "]Get[/color], Inventory and Use.\n\nWhen you’re ready, type [color=" + green_color + "]Start[/color] to begin your adventure."
 const INVALID_ACTION_MESSAGE: String = "Nothing happens..."
 const INVALID_COMPLEMENT_MESSAGE: String = "For a moment you feel confused... there is no "
@@ -51,9 +52,16 @@ func check_user_action(user_input: String) -> void:
 					update_narrative(user_input)
 					update_narrative(INVALID_ACTION_MESSAGE)
 	else:
-		if input_action == "start":
-			start_action()
-	
+		if is_game_started:
+			if input_action == "inventory":
+				inventory_action()
+			else: 
+				update_narrative(user_input)
+				update_narrative(INVALID_ACTION_MESSAGE)		
+		else:
+			if input_action == "start":
+				start_action()
+		
 	reset_user_input()
 	
 func start_action() -> void:
@@ -113,6 +121,15 @@ func get_action(target: String) -> void:
 	update_narrative("[color=" + pink_color + "]Get[/color] " + target)
 	update_narrative(INVALID_COMPLEMENT_MESSAGE + target)
 
+func inventory_action() -> void:
+	if inventory:
+		var inventory_items: String
+		for item in inventory:
+			inventory_items += "- " + item.title + "\n"
+		update_narrative("Your [color=" + yellow_color + "]inventory[/color] contains the following items:\n" + inventory_items)
+	else:
+		update_narrative("Your [color=" + yellow_color + "]inventory[/color] is empty.")
+		
 func _on_user_input_text_submitted(user_input: String):
 	# Check if user input is not empty or just spaces
 	if user_input.strip_edges():
