@@ -9,6 +9,7 @@ var current_specting_stuff: Stuff
 var is_game_started: bool = false
 var turns: int = 10
 var inventory: Array[Item]
+var is_inventory_open: bool = false
 
 const green_color: String = "#29D640"
 const orange_color: String = "#FBB13C"
@@ -77,6 +78,7 @@ func go_action(location: String) -> void:
 			update_narrative("[color=" + orange_color + "]Go[/color] " + location)
 			current_room = exit
 			show_current_room_description()
+			is_inventory_open = false
 			return
 
 	update_narrative("[color=" + orange_color + "]Go[/color] " + location)
@@ -87,7 +89,14 @@ func inspect_action(target: String) -> void:
 	if target.to_lower() == current_room.title.to_lower():
 		update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
 		update_narrative(current_room.description)
+		is_inventory_open = false
 		return
+	if is_inventory_open:
+		for item in inventory:
+			if target.to_lower() == item.title.to_lower():
+				update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
+				update_narrative(item.description)
+				return
 	else:
 		# Check among stuff in current room a title as valid target
 		for stuff in current_room.stuffs:
@@ -95,6 +104,7 @@ func inspect_action(target: String) -> void:
 				current_specting_stuff = stuff
 				update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
 				update_narrative(stuff.description)
+				is_inventory_open = false
 				return
 			else: 
 				# Check items in current inspecting stuff a title as valid target
@@ -103,6 +113,7 @@ func inspect_action(target: String) -> void:
 						if target.to_lower() == item.title.to_lower():
 							update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
 							update_narrative(item.description)
+							is_inventory_open = false
 							return
 			
 	update_narrative("[color=" + blue_color + "]Inspect[/color] " + target)
@@ -122,8 +133,10 @@ func get_action(target: String) -> void:
 	update_narrative(INVALID_COMPLEMENT_MESSAGE + target)
 
 func inventory_action() -> void:
+	is_inventory_open = true
+	
 	if inventory:
-		var inventory_items: String
+		var inventory_items: String = ""
 		for item in inventory:
 			inventory_items += "- " + item.title + "\n"
 		update_narrative("Your [color=" + yellow_color + "]inventory[/color] contains the following items:\n" + inventory_items)
