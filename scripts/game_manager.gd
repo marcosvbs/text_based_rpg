@@ -34,8 +34,8 @@ func update_narrative(new_text: String) -> void:
 func show_current_room_description() -> void:
 	update_narrative(current_room.description) 
 
-func check_user_action(user_input: String) -> void:
-	var input_parts: PackedStringArray = user_input.split(" ", false, 1)
+func check_user_action(input: String) -> void:
+	var input_parts: PackedStringArray = input.split(" ", false, 1)
 	var input_action: String = input_parts[0].to_lower()
 	
 	if input_parts.size() >= 2:
@@ -72,7 +72,6 @@ func start_action() -> void:
 	show_current_room_description()
 	
 func go_action(location: String) -> void:
-	
 	for exit in current_room.exits:
 		if location.to_lower() == exit.title.to_lower():
 			update_narrative("[color=" + orange_color + "]Go[/color] " + location)
@@ -143,10 +142,10 @@ func inventory_action() -> void:
 	else:
 		update_narrative("Your [color=" + yellow_color + "]inventory[/color] is empty.")
 		
-func _on_user_input_text_submitted(user_input: String):
+func _on_user_input_text_submitted(input: String):
 	# Check if user input is not empty or just spaces
-	if user_input.strip_edges():
-		check_user_action(user_input)
+	if input.strip_edges():
+		check_user_action(input)
 	else:
 		reset_user_input()
 
