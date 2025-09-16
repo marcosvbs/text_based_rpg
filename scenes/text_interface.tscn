@@ -1,0 +1,60 @@
+[gd_scene load_steps=4 format=3 uid="uid://dmrmkfmhn1vub"]
+
+[ext_resource type="Script" uid="uid://ckcrki41om1pu" path="res://scripts/text_interface.gd" id="1_x4jx1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgp6g"]
+bg_color = Color(0.0687983, 0.0687983, 0.0687982, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o5qli"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="TextInterface" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_sgp6g")
+script = ExtResource("1_x4jx1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="DescriptionContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="Narrative" type="RichTextLabel" parent="VBoxContainer/DescriptionContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+bbcode_enabled = true
+scroll_following = true
+vertical_alignment = 2
+text_direction = 1
+
+[node name="InputContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/margin_bottom = 40
+
+[node name="UserInput" type="LineEdit" parent="VBoxContainer/InputContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(600, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_o5qli")
+placeholder_text = "O que você faz?"
+max_length = 30
+
+[connection signal="text_submitted" from="VBoxContainer/InputContainer/UserInput" to="." method="_on_user_input_text_submitted"]
