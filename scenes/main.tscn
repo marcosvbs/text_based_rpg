@@ -28,8 +28,8 @@ starting_room = NodePath("Rooms/StartingRoom")
 [node name="StartingRoom" parent="GameManager/Rooms" node_paths=PackedStringArray("exits") instance=ExtResource("4_jyhfs")]
 title = "Starting Room"
 description = "You are in Starting Room"
-exits = [NodePath("../AnotherRoom")]
+exits = [NodePath("../Corridor")]
 
-[node name="AnotherRoom" parent="GameManager/Rooms" instance=ExtResource("4_jyhfs")]
-title = "Another Room"
-description = "You are in Another Room"
+[node name="Corridor" parent="GameManager/Rooms" instance=ExtResource("4_jyhfs")]
+title = "Corridor"
+description = "You are in Corridor"
