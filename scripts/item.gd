@@ -1,11 +1,9 @@
 extends Node
 
-class_name Room
+class_name Item
 
 @export var title: String
 @export var description: String
-@export var exits: Array[Room] = []
-@export var items: Array[Item] = []
 
 func inspect():
 	return description

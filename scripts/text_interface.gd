@@ -18,6 +18,7 @@ func reset_narrative() -> void:
 	narrative.text = ""
 	
 func _on_user_input_text_submitted(new_text: String) -> void:
-	emit_signal("input_text_entered", new_text)
-	reset_user_input()
+	if new_text.strip_edges():
+		emit_signal("input_text_entered", new_text)
+		reset_user_input()
 	

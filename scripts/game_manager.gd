@@ -15,14 +15,23 @@ func _on_text_input_entered(text: String) -> void:
 	execute_action(command)
 	
 func execute_action(command: Dictionary[String, String]):
+	text_interface.update_narrative(command["raw_text"])
+	
 	if is_game_started:
 		match command["action"]:
 			"go":
 				go(command["complement"])
+			"inspect":
+				if current_room.title.to_lower() == command["complement"]:
+					text_interface.update_narrative(current_room.inspect()) 
+				else:
+					for item in current_room.items:
+						if item.title.to_lower() == command["complement"]:
+							text_interface.update_narrative(item.inspect()) 
 			_:
 				text_interface.update_narrative("Invalid action") 
 	else:
-		if command["action"] == "start":
+		if command["action"] == "start" && not command["complement"]:
 			start_game()
 		else:
 			text_interface.update_narrative("Invalid action") 
