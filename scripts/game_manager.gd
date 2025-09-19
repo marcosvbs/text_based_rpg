@@ -22,19 +22,27 @@ func execute_action(command: Dictionary[String, String]):
 	if is_game_started:
 		if command["action"] == "inventory" && not command["complement"]:
 			text_interface.update_narrative(player.show_inventory()) 
+			is_inventory_open = true
 			return
 		match command["action"]:
 			"go":
 				go(command["complement"])
 			"inspect":
-				if current_room.title.to_lower() == command["complement"]:
-					text_interface.update_narrative(current_room.inspect()) 
+				if is_inventory_open:
+					for item in player.inventory:
+							if item.title.to_lower() == command["complement"]:
+								text_interface.update_narrative(item.inspect())
 				else:
-					for item in current_room.items:
-						if item.title.to_lower() == command["complement"]:
-							text_interface.update_narrative(item.inspect()) 
+					if current_room.title.to_lower() == command["complement"]:
+						text_interface.update_narrative(current_room.inspect()) 
+					else:
+						for item in current_room.items:
+							if item.title.to_lower() == command["complement"]:
+								text_interface.update_narrative(item.inspect()) 
 			_:
 				text_interface.update_narrative("Invalid action") 
+		
+		is_inventory_open = false
 	else:
 		if command["action"] == "start" && not command["complement"]:
 			start_game()
