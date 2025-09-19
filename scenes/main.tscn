@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://352qgue0vvcc"]
+[gd_scene load_steps=7 format=3 uid="uid://352qgue0vvcc"]
 
 [ext_resource type="Script" uid="uid://gr4fve5bqsy2" path="res://scripts/game_manager.gd" id="1_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://dmrmkfmhn1vub" path="res://scenes/text_interface.tscn" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://dradxkrx5elsv" path="res://scenes/command_parser.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://2i7qlw045elv" path="res://scenes/room.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://cq8mik7bxrmym" path="res://scenes/player.tscn" id="4_tefeu"]
 [ext_resource type="PackedScene" uid="uid://ccnwwk7loa3r8" path="res://scenes/item.tscn" id="5_tbgi4"]
 
 [node name="Main" type="Control"]
@@ -14,15 +15,18 @@ offset_bottom = 648.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("text_interface", "command_parser", "starting_room")]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("text_interface", "command_parser", "starting_room", "player")]
 script = ExtResource("1_0wfyh")
 text_interface = NodePath("TextInterface")
 command_parser = NodePath("CommandParser")
 starting_room = NodePath("Rooms/StartingRoom")
+player = NodePath("Player")
 
 [node name="CommandParser" parent="GameManager" instance=ExtResource("2_sugp2")]
 
 [node name="TextInterface" parent="GameManager" instance=ExtResource("2_0wfyh")]
+
+[node name="Player" parent="GameManager" instance=ExtResource("4_tefeu")]
 
 [node name="Rooms" type="Node" parent="GameManager"]
 
